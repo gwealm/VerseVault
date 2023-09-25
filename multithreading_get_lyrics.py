@@ -28,7 +28,7 @@ df = pd.read_csv(csv_filename)
 df['lyrics'] = ""
 
 # Define the maximum number of threads (you can adjust this)
-max_threads = 31
+max_threads = 32
 
 # Create a ThreadPoolExecutor with the specified number of threads
 with ThreadPoolExecutor(max_threads) as executor:
