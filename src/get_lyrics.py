@@ -1,17 +1,26 @@
-import json
+from concurrent.futures import ThreadPoolExecutor
 import pandas as pd
 import requests
-from concurrent.futures import ThreadPoolExecutor
 
 DATA_DIR = "../data/"
 
 # Function to fetch lyrics for a single track
 def fetch_lyrics(index, row):
+    """
+    Fetches lyrics for a given track and artist using a local API.
+
+    Args:
+        index (int): The index of the row in the DataFrame.
+        row (pandas.Series): The row of the DataFrame containing the track and artist information.
+
+    Returns:
+        None
+    """
     artist_name = row['Artist']
     track_name = row['Track']
-    
+
     api_url = f'http://localhost:3000/api/{track_name}/{artist_name}'
-    response = requests.get(api_url)
+    response = requests.get(api_url, timeout=10)
     
     if response.status_code == 200:
         lyrics_data = response.json()
@@ -33,10 +42,10 @@ if __name__ == '__main__':
     df['lyrics'] = ""
 
     # Define the maximum number of threads (you can adjust this)
-    max_threads = 32
+    MAX_THREADS = 32
 
     # Create a ThreadPoolExecutor with the specified number of threads
-    with ThreadPoolExecutor(max_threads) as executor:
+    with ThreadPoolExecutor(MAX_THREADS) as executor:
         # Iterate through each row in the DataFrame and submit tasks
         futures = [executor.submit(fetch_lyrics, index, row) for index, row in df.iterrows()]
 
@@ -45,7 +54,7 @@ if __name__ == '__main__':
             future.result()
 
     # Save the updated DataFrame with the "lyrics" column to a new CSV file
-    output_csv_filename = DATA_DIR + 'music_data_with_lyrics.csv'
-    df.to_csv(output_csv_filename, index=False)
+    OUT_CSV = DATA_DIR + 'music_data_with_lyrics.csv'
+    df.to_csv(OUT_CSV, index=False)
 
-    print(f'CSV file "{output_csv_filename}" has been created with lyrics.')
+    print(f'CSV file "{OUT_CSV}" has been created with lyrics.')

@@ -1,3 +1,5 @@
 ### dotenv ###
 .env
 
+### vscode ###
+.vscode

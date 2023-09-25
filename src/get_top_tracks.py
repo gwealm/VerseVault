@@ -1,8 +1,8 @@
-import requests
-from dotenv import load_dotenv
-import os
 import time
 import pprint
+import os
+import requests
+from dotenv import load_dotenv
 import pandas as pd
 
 load_dotenv()
@@ -25,14 +25,14 @@ endpoint = f'http://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&limit={
 
 if __name__ == '__main__':
 
-    # Create a Pandas DataFrame
-    top_tracks_df = pd.DataFrame(columns=['Artist', 'Track'])
+    # Create an empty list to store the data
+    top_tracks_data = []
 
-    max_page_number = 1000
+    MAX_PAGE_NUMBER = 1000
 
-    for i in range(1,max_page_number):
+    for i in range(1,MAX_PAGE_NUMBER):
         # Send a GET request to the Last.fm API
-        response = requests.get(endpoint + f"&page={i}")
+        response = requests.get(endpoint + f"&page={i}", timeout=10)
 
         if response.status_code == 200:
             data = response.json()
@@ -43,14 +43,17 @@ if __name__ == '__main__':
             for track in top_tracks:
                 artist_name = track['artist']['name']
                 track_name = track['name']
-                top_tracks_df = top_tracks_df.add({'Artist': artist_name, 'Track': track_name})
-                print(f'Artist: {artist_name}, Track: {track_name}\n')
+
+                top_tracks_data.append({'Artist': artist_name, 'Track': track_name})
+                print(f'Artist: {artist_name}, Track: {track_name}')
+        else:
+            print('Failed to retrieve top tracks.')
 
         time.sleep(1)
         
-    else:
-        print('Failed to retrieve top tracks.')
         
+    # Create a DataFrame from the list of data
+    top_tracks_df = pd.DataFrame(top_tracks_data)
+
     # Save the DataFrame to a CSV file
     top_tracks_df.to_csv('top_tracks.csv', index=False)
-
