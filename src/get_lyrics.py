@@ -2,7 +2,7 @@ from concurrent.futures import ThreadPoolExecutor
 import pandas as pd
 import requests
 
-DATA_DIR = "../data/"
+DATA_DIR = "./data/"
 
 # Function to fetch lyrics for a single track
 def fetch_lyrics(index, row):
@@ -16,8 +16,8 @@ def fetch_lyrics(index, row):
     Returns:
         None
     """
-    artist_name = row['Artist']
-    track_name = row['Track']
+    artist_name = row['artist_name']
+    track_name = row['track_name']
 
     api_url = f'http://localhost:3000/api/{track_name}/{artist_name}'
     response = requests.get(api_url, timeout=10)
@@ -32,7 +32,7 @@ def fetch_lyrics(index, row):
         print(f"Iteration {index}: Failed")
 
 # Load the CSV into a DataFrame
-csv_filename = 'music_data.csv'
+csv_filename = DATA_DIR + 'track_queue.csv'
 
 if __name__ == '__main__':
 
@@ -54,7 +54,7 @@ if __name__ == '__main__':
             future.result()
 
     # Save the updated DataFrame with the "lyrics" column to a new CSV file
-    OUT_CSV = DATA_DIR + 'music_data_with_lyrics.csv'
+    OUT_CSV = DATA_DIR + 'track_lyrics.csv'
     df.to_csv(OUT_CSV, index=False)
 
     print(f'CSV file "{OUT_CSV}" has been created with lyrics.')
