@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/home/lima/university/FEUP-PRI/project/src/get_top_tracks.py", line 245, in <module>
+Traceback (most recent call last):
+  File "/home/lima/university/FEUP-PRI/project/src/get_top_tracks.py", line 245, in <module>
+    restore_progress()
+    restore_progress()
+  File "/home/lima/university/FEUP-PRI/project/src/get_top_tracks.py", line 121, in restore_progress
+  File "/home/lima/university/FEUP-PRI/project/src/get_top_tracks.py", line 121, in restore_progress
+    track_queue.remove(track)
+    track_queue.remove(track)
+ValueError: list.remove(x): x not in list
+ValueError: list.remove(x): x not in list

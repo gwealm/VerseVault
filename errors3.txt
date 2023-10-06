@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/home/lima/university/FEUP-PRI/project/src/get_top_tracks.py", line 291, in <module>
+Traceback (most recent call last):
+  File "/home/lima/university/FEUP-PRI/project/src/get_top_tracks.py", line 291, in <module>
+    visit_track(next_track)
+    visit_track(next_track)
+  File "/home/lima/university/FEUP-PRI/project/src/get_top_tracks.py", line 211, in visit_track
+  File "/home/lima/university/FEUP-PRI/project/src/get_top_tracks.py", line 211, in visit_track
+    track_info = res["track"]
+    track_info = res["track"]
+                 ~~~^^^^^^^^^
+KeyError: 'track'
+                 ~~~^^^^^^^^^
+KeyError: 'track'
