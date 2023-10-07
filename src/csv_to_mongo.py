@@ -3,25 +3,19 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from urllib.parse import quote_plus
 import os
-from dotenv_vault import load_dotenv
-import csv
+from dotenv import load_dotenv
+import json
 
-def write_csv_to_mongo(collection_name):
-    with open(f"{collection_name}.csv", newline='') as csvfile:
-        reader = csv.DictReader(csvfile)
-        collection = client["versevault"][collection_name]
-        collection.insert_many(reader)
+def write_json_to_mongo():
+    with open(f"data-limwa/tracks.json", "r") as jsonfile:
+        tracks = json.load(jsonfile)
+        collection = client["versevault"]["tracks"]
+        
+        collection.delete_many({})    
+        collection.insert_many(tracks)
 
 load_dotenv()
 password = os.getenv('PASSWORD')
-
-collections = [
-    "track_info",
-    "track_queue",
-    "album_queue",
-    "artist_queue",
-    "track_lyrics"
-]
 
 if password is not None:
     password = quote_plus(password.encode('utf-8'))
@@ -37,8 +31,7 @@ client = MongoClient(URI, server_api=ServerApi('1'))
 try:
     client.admin.command('ping')
     
-    for collection in collections:
-        write_csv_to_mongo(collection)
+    write_json_to_mongo()
     
     print("Pinged your deployment. You successfully connected to MongoDB!")
 except Exception as e:
