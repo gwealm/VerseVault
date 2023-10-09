@@ -1,18 +1,24 @@
 
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
+from bson.objectid import ObjectId
 from urllib.parse import quote_plus
 import os
 from dotenv import load_dotenv
 import json
 
-def write_json_to_mongo():
-    with open(f"data/tracks.json", "r") as jsonfile:
-        tracks = json.load(jsonfile)
+class MyJSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, ObjectId):
+            return str(obj)
+        return json.JSONEncoder.default(self, obj)
+    
+def write_mongo_to_json():
+    with open(f"data/backup-tracks.json", "w") as jsonfile:
         collection = client["versevault"]["tracks"]
         
-        collection.delete_many({})    
-        collection.insert_many(tracks)
+        tracks = list(collection.find({}))
+        json.dump(tracks, jsonfile, cls=MyJSONEncoder)
 
 load_dotenv()
 password = os.getenv('PASSWORD')
@@ -31,7 +37,7 @@ client = MongoClient(URI, server_api=ServerApi('1'))
 try:
     client.admin.command('ping')
     
-    write_json_to_mongo()
+    write_mongo_to_json()
     
     print("Pinged your deployment. You successfully connected to MongoDB!")
 except Exception as e:

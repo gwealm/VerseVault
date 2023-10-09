@@ -6,7 +6,7 @@ def main():
     
     sections_regex = re.compile(r"\[(.*?)]\n(.*?)(?=$|\n\[)", re.U | re.S)
     
-    with open(f"data-limwa/track_tags.csv", "r") as csvfile:
+    with open(f"data/track_tags.csv", "r") as csvfile:
         reader = csv.DictReader(csvfile, fieldnames=[
             "order",
             "name",
@@ -34,7 +34,7 @@ def main():
             if len(sections) == 0:
                 sections = [{ "content": lyrics }]
             
-            genres = row["filtered_tags"].split("%SEP%")
+            genres = list(filter(lambda x: x != "", row["filtered_tags"].split("%SEP%")))
             
             duration = int(row["duration"] or "0")
             
@@ -78,7 +78,7 @@ def main():
             tracks.append(track)
                 
                 
-        with open(f"data-limwa/tracks.json", "w") as jsonfile:
+        with open(f"data/tracks.json", "w") as jsonfile:
             json.dump(tracks, jsonfile)
         
         
