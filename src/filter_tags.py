@@ -4,6 +4,7 @@ import time
 import requests
 import dotenv
 import os
+import re
 import sys
 import csv
 from concurrent.futures import ThreadPoolExecutor
@@ -14,8 +15,8 @@ LASTFM_API_KEY = os.getenv('LASTFM_API_KEY')
 
 RPS = 20
 
-reader = csv.reader(open("./data-limwa/track_lyrics.csv", 'r'))
-writer = csv.writer(open("./data-limwa/track_tags.csv", 'w'), quoting=csv.QUOTE_NONNUMERIC)
+reader = csv.reader(open("./data/track_lyrics.csv", 'r'))
+writer = csv.writer(open("./data/track_tags.csv", 'w'), quoting=csv.QUOTE_NONNUMERIC)
 
 
 class LockableSet:
@@ -71,20 +72,25 @@ def get_from_lastfm(method: str, **kwargs) -> dict | None:
             print(f"Request caused exception {e} on params \"{kwargs}\"\n", file=sys.stderr)
             time.sleep(5)
             
+
 def is_tag_genre(tag: str) -> bool:
-    
     res = get_from_lastfm('tag.getinfo', tag=tag)
+    
     if res is None:
         return False
     
     if 'tag' not in res or 'wiki' not in res['tag'] or 'summary' not in res['tag']['wiki']:
         return False
     
-    summary = res['tag']['wiki']['summary']
-    if 'genre' in summary.lower():
+    summary = res['tag']['wiki']['summary'].lower()
+    
+    # Use regular expression to match the exact word "genre"
+    if re.search(r'\bgenre\b', summary):
         return True
     
     return False
+
+
     
 def process_row(index, row):
     print(f"Iteration {index}")
