@@ -2,42 +2,43 @@
 
 import sys
 import json
-
+  
 def dump(obj, property_path, if_undefined=None):
     if len(property_path) == 0:
-        print(obj)
+        yield obj
         return
         
     first_property, *rest_property = property_path
      
     if isinstance(obj, dict):
         if first_property not in obj:
-            if if_undefined is not None:
-                print(if_undefined)
+            if len(rest_property) == 0 and if_undefined is not None:
+                yield if_undefined
                 
             return
         
-        dump(obj[first_property], rest_property, if_undefined)
+        yield from dump(obj[first_property], rest_property, if_undefined)
         return
     
     if isinstance(obj, list):
         
         if first_property == "*":
             for elem in obj:
-                dump(elem, rest_property, if_undefined)
+                yield from dump(elem, rest_property, if_undefined)
                 
             return
 
         if first_property.isnumeric():
             index = int(first_property)
             
-            if index < len(obj):            
-                dump(obj[index], rest_property, if_undefined)
+            if index < len(obj):
+                yield from dump(obj[index], rest_property, if_undefined)
                 return
             
         if if_undefined is not None:
-            print(if_undefined)
-            return
+            yield if_undefined
+            
+        return
     
     raise ValueError(f"Invalid property path: {str(property_path)} on {obj}")
             
@@ -62,7 +63,8 @@ def main():
             break
         
         obj = json.loads(line)
-        dump(obj, property_path, if_not_exists)
+        for val in dump(obj, property_path, if_not_exists):
+            print(json.dumps(val))
         
         
     input_fd.close()
