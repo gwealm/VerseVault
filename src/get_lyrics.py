@@ -3,7 +3,7 @@ import pandas as pd
 import requests
 import csv
 
-DATA_DIR = "./data-limwa/"
+DATA_DIR = "./data/"
 
 reader = csv.reader(open(DATA_DIR + "track_info.csv", 'r'))
 writer = csv.writer(open(DATA_DIR + "track_lyrics.csv", 'w'), quoting=csv.QUOTE_NONNUMERIC)
