@@ -44,7 +44,7 @@ if __name__ == '__main__':
         track["entities"] = ents
         print(f'Status: {(index / len(obj)) * 100}% Completed')
         
-    json.dump(obj, open("data/backup-tracks-with-entities.json", "w")) 
+    json.dump(obj, open("../data/backup-tracks-with-entities.json", "w")) 
         
         
         
