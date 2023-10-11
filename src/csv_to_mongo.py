@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 import json
 
 def write_json_to_mongo():
-    with open(f"data/tracks.json", "r") as jsonfile:
+    with open(f"data/final-tracks.json", "r") as jsonfile:
         tracks = json.load(jsonfile)
         collection = client["versevault"]["tracks"]
         

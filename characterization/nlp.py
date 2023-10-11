@@ -28,15 +28,15 @@ if __name__ == '__main__':
         doc = nlp(text)
 
         sentences = list(doc.sents)
-        # print(sentences)\
+        print(sentences)
 
         # tokenization
-        # for token in doc:
-            # print(token.text)
+        for token in doc:
+            print(token.text)
 
         # entities
         ents = [{ "text": e.text, "start": e.start_char, "end": e.end_char, "type": e.label_} for e in doc.ents]
-        # print(ents)
+        print(ents)
 
         displacy.render(doc, style='ent')
         
