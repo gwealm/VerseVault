@@ -1,0 +1,97 @@
+{
+	"add-field-type": [
+        {
+            "name":"courseTitle",
+            "class":"solr.TextField",
+            "indexAnalyzer":{
+                "tokenizer":{
+                    "class":"solr.StandardTokenizerFactory"
+                },
+                "filters":[
+                    {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
+                    {"class":"solr.LowerCaseFilterFactory"}
+                ]
+            },
+            "queryAnalyzer":{
+                "tokenizer":{
+                    "class":"solr.StandardTokenizerFactory"
+                },
+                "filters":[
+                    {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
+                    {"class":"solr.LowerCaseFilterFactory"}
+                ]
+            }
+        }
+    ],
+    "add-field": [
+        {
+            "name": "_root_",
+            "type": "string",
+            "indexed": true,
+            "stored": false,
+        },
+        {
+            "name": "_id",
+            "type": "string",
+            "indexed": true,
+            "stored": true
+        },
+        {
+            "name": "__order",
+            "type": "plong",
+            "indexed": true,
+            "stored": true
+        },
+        {
+            "name": "name",
+            "type": "text_general",
+            "indexed": true,
+            "stored": true
+        },
+        {
+            "name": "duration",
+            "type": "plong",
+            "indexed": true,
+            "stored": true
+        },
+        {
+            "name": "url",
+            "type": "string",
+            "indexed": true,
+            "stored": true
+        },
+        {
+            "name": "artist",
+            "type": "text_general",
+            "indexed": true,
+            "stored": true
+        },
+        {
+            "name": "publishedAt",
+            "type": "text_general",
+            "indexed": true,
+            "stored": true
+        },
+        {
+            "name": "genres",
+            "type": "text_general",
+            "multiValued": true,
+            "indexed": true,
+            "stored": true
+        },
+        {
+            "name": "lyrics",
+            "type": "text_general",
+            "indexed": true,
+            "stored": true
+        },
+        {
+            "name": "entities",
+            "type": "text_general",
+            "multiValued": true,
+            "indexed": true,
+            "stored": true
+        }
+    ]
+}
+
