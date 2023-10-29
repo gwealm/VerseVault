@@ -6,13 +6,17 @@ import os
 from dotenv import load_dotenv
 import json
 
+def remove_id_from_dict(x: dict):
+    x.pop("_id")
+    return x    
+
 def write_json_to_mongo():
-    with open(f"data/final-tracks.json", "r") as jsonfile:
+    with open(f"data/backup-tracks-with-entities.json", "r") as jsonfile:
         tracks = json.load(jsonfile)
         collection = client["versevault"]["tracks"]
         
         collection.delete_many({})    
-        collection.insert_many(tracks)
+        collection.insert_many(map(remove_id_from_dict, tracks))
 
 load_dotenv()
 password = os.getenv('PASSWORD')

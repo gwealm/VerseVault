@@ -28,7 +28,7 @@
             "name": "_root_",
             "type": "string",
             "indexed": true,
-            "stored": false,
+            "stored": false
         },
         {
             "name": "_id",
@@ -63,7 +63,7 @@
         {
             "name": "artist",
             "type": "text_general",
-            "indexed": true,
+            "indexed": true,OOPS
             "stored": true
         },
         {

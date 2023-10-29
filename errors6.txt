@@ -1,8 +1,0 @@
-Request caused exception Expecting value: line 1 column 1 (char 0) on params "{'artist': 'Korn', 'track': "A.D.I.D.A.S. (live at Woodstock '99)", 'api_key': 'd706fd0c0aef8a6ae8edad11ea7a82d4', 'format': 'json', 'method': 'track.getInfo'}"
-
-Request caused exception Expecting value: line 1 column 1 (char 0) on params "{'artist': 'Korn', 'track': "A.D.I.D.A.S. (live at Woodstock '99)", 'api_key': 'd706fd0c0aef8a6ae8edad11ea7a82d4', 'format': 'json', 'method': 'track.getInfo'}"
-
-Request caused exception Expecting value: line 1 column 1 (char 0) on params "{'artist': 'Tiësto', 'track': 'BOOM', 'api_key': 'd706fd0c0aef8a6ae8edad11ea7a82d4', 'format': 'json', 'method': 'track.getInfo'}"
-
-Request caused exception Expecting value: line 1 column 1 (char 0) on params "{'artist': 'Tiësto', 'track': 'BOOM', 'api_key': 'd706fd0c0aef8a6ae8edad11ea7a82d4', 'format': 'json', 'method': 'track.getInfo'}"
-

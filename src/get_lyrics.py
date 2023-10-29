@@ -1,12 +1,10 @@
 from concurrent.futures import ThreadPoolExecutor
-import pandas as pd
-import requests
+import sys
 import csv
+import requests
 
-DATA_DIR = "./data/"
-
-reader = csv.reader(open(DATA_DIR + "track_info.csv", 'r'))
-writer = csv.writer(open(DATA_DIR + "track_lyrics.csv", 'w'), quoting=csv.QUOTE_NONNUMERIC)
+reader = csv.reader(sys.stdin)
+writer = csv.writer(sys.stdout, quoting=csv.QUOTE_NONNUMERIC)
 
 writes = []
 
@@ -34,15 +32,15 @@ def fetch_lyrics(index, row):
         except InterruptedError as e:
             raise e
         except:
-            print(f"Request for {track_name} by {artist_name} failed")
+            print(f"Request for {track_name} by {artist_name} failed", file=sys.stderr)
     
     if response.status_code == 200:
         lyrics_data = response.json()
         lyrics = lyrics_data.get('lyrics', 'Lyrics not found')
-        print(f"Iteration {index}: successful")
+        print(f"Iteration {index}: successful", file=sys.stderr)
         return [index, *row, lyrics]
     else:
-        print(f"Iteration {index}: Failed")
+        print(f"Iteration {index}: Failed", file=sys.stderr)
         return [index, *row, "API request failed"]
 
 
@@ -61,4 +59,4 @@ if __name__ == '__main__':
         for future in futures:
             writer.writerow(future.result())
 
-    print(f'CSV file "{DATA_DIR + "track_lyrics.csv"}" has been created with lyrics.')
+    print(f'Done.', file=sys.stderr)

@@ -1,13 +1,13 @@
 import csv
 import re
 import json
+import sys
 
 def main():
     
-    sections_regex = re.compile(r"\[(.*?)]\n(.*?)(?=$|\n\[)", re.U | re.S)
+        sections_regex = re.compile(r"\[(.*?)]\n(.*?)(?=$|\n\[)", re.U | re.S)
     
-    with open(f"data/track_tags.csv", "r") as csvfile:
-        reader = csv.DictReader(csvfile, fieldnames=[
+        reader = csv.DictReader(sys.stdin, fieldnames=[
             "order",
             "name",
             "duration",

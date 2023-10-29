@@ -9,7 +9,7 @@ usage() {
 }
 
 schema_file="schema1.json"
-data_file="backup-tracks.json"
+data_file="backup-tracks-with-entities.json"
 core_name="tracks"
 
 while getopts "s:d:c:" opt; do
@@ -21,10 +21,11 @@ while getopts "s:d:c:" opt; do
     esac
 done
 
-precreate-core tracks
+# precreate-co tracks
 
 # Start Solr in background mode so we can use the API to upload the schema
-solr start
+# solr start
+/opt/solr/bin/solr create_core -c tracks -V
 
 # Schema definition via API
 curl -X POST -H 'Content-type:application/json' \
@@ -32,7 +33,7 @@ curl -X POST -H 'Content-type:application/json' \
     "http://localhost:8983/solr/$core_name/schema"
 
 # Populate collection
-bin/post -c $core_name /data/"$data_file"
+/opt/solr/bin/post -c $core_name ../data/"$data_file"
 
 # Restart in foreground mode so we can access the interface
 solr restart -f

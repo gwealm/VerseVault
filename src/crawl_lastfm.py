@@ -15,14 +15,14 @@ load_dotenv()
 LASTFM_API_KEY = os.getenv('LASTFM_API_KEY')
 
 # Directory to save the data
-DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data-limwa")
+DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
 
 # Numbers of tracks to be shown
 TRACK_NO = 1000
 
 RPS = 20
 
-def kms(x):
+def normalize_xml_value(x):
     if isinstance(x, list):
         return x
     
@@ -45,8 +45,6 @@ def tee_to_csv(array, filename, cols):
     file_handle = open(get_csv_path(filename), 'a')
     csv_writer = csv.writer(file_handle, quoting=csv.QUOTE_NONNUMERIC)
     
-    # csv_writer.writerow(cols)
-     
     def add_to_array(x):
         array.append(x)
         
@@ -195,7 +193,7 @@ def visit_album(album):
     schedule_artist_visit(album_artist_name)
     
     if "tracks" in res["album"]:
-        album_tracks = kms(res["album"]["tracks"]["track"])
+        album_tracks = normalize_xml_value(res["album"]["tracks"]["track"])
         
         for track in album_tracks:
             track_tuple = (track["artist"]["name"], track["name"])
@@ -210,7 +208,7 @@ def visit_artist(artist_tuple: Tuple[str]):
     res = get_from_lastfm('artist.getTopTracks', artist=artist)
     
     if res is not None:
-        top_tracks = kms(res["toptracks"]["track"])
+        top_tracks = normalize_xml_value(res["toptracks"]["track"])
         
         for top_track in top_tracks:
             track_tuple = (top_track["artist"]["name"], top_track["name"])
@@ -219,7 +217,7 @@ def visit_artist(artist_tuple: Tuple[str]):
     res = get_from_lastfm('artist.getTopAlbums', artist=artist)
     
     if res is not None:
-        top_albums = kms(res["topalbums"]["album"])
+        top_albums = normalize_xml_value(res["topalbums"]["album"])
     
         for top_album in top_albums:
             album_tuple = (top_album["artist"]["name"], top_album["name"])
@@ -228,7 +226,7 @@ def visit_artist(artist_tuple: Tuple[str]):
     res = get_from_lastfm('artist.getSimilar', artist=artist)
     
     if res is not None:
-        similar_artists = kms(res["similarartists"]["artist"])
+        similar_artists = normalize_xml_value(res["similarartists"]["artist"])
     
         for similar_artist in similar_artists:
             schedule_artist_visit(similar_artist["name"])
@@ -286,7 +284,7 @@ def visit_track(track: Track):
                 relevant_track_data["album_image"] = track_info["album"]["image"][-1]["#text"]
                 
         if "toptags" in track_info and "tag" in track_info["toptags"]:
-            relevant_track_data["tags"] = "%SEP%".join([tag["name"] for tag in kms(track_info["toptags"]["tag"])])
+            relevant_track_data["tags"] = "%SEP%".join([tag["name"] for tag in normalize_xml_value(track_info["toptags"]["tag"])])
             
         if "wiki" in track_info and "published" in track_info["wiki"]:
             relevant_track_data["published_date"] = track_info["wiki"]["published"]
@@ -306,7 +304,7 @@ def main():
         if res is None:
             continue
         
-        artist_chart_page = kms(res["artists"]["artist"])
+        artist_chart_page = normalize_xml_value(res["artists"]["artist"])
         
         if len(artist_chart_page) == 0:
             break
@@ -323,7 +321,7 @@ def main():
         if res is None:
             continue
         
-        track_chart_page = kms(res["tracks"]["track"])
+        track_chart_page = normalize_xml_value(res["tracks"]["track"])
         
         if len(track_chart_page) == 0:
             break
