@@ -80,7 +80,7 @@
             "stored": true
         },
         {
-            "name": "lyrics",
+            "name_s": "lyrics",
             "type": "text_general",
             "indexed": true,
             "stored": true

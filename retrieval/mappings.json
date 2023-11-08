@@ -1,0 +1,51 @@
+{
+    "properties": {
+      "@timestamp": {
+        "type": "date_nanos"
+      },
+      "trackId": {
+        "type": "keyword"
+      },
+      "__order": {
+        "type": "long"
+      },
+      "album": {
+        "type": "object"
+      },
+      "artist": {
+        "type": "keyword"
+      },
+      "duration": {
+        "type": "long",
+        "null_value": -1
+      },
+      "entities": {
+        "type": "object"
+      },
+      "genres": {
+        "type": "keyword"
+      },
+      "lyrics": {
+        "type": "nested",
+        "properties": {
+            "title": {
+                "type": "text",
+                "null_value": ""
+            },
+            "content": {
+                "type": "text"
+            }
+        }
+      },
+      "name": {
+        "type": "text"
+      },
+      "publishedAt": {
+        "type": "date",
+        "null_value": ""
+      },
+      "url": {
+        "type": "text"
+      }
+    }
+  }
