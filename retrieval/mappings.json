@@ -1,7 +1,8 @@
 {
     "properties": {
       "@timestamp": {
-        "type": "date_nanos"
+        "type": "date_nanos",
+        "null_value": "2023-11-09T00:00:00.000000000Z"
       },
       "trackId": {
         "type": "keyword"
@@ -13,7 +14,7 @@
         "type": "object"
       },
       "artist": {
-        "type": "keyword"
+        "type": "text"
       },
       "duration": {
         "type": "long",
@@ -29,8 +30,7 @@
         "type": "nested",
         "properties": {
             "title": {
-                "type": "text",
-                "null_value": ""
+                "type": "text"
             },
             "content": {
                 "type": "text"
@@ -42,7 +42,7 @@
       },
       "publishedAt": {
         "type": "date",
-        "null_value": ""
+        "format": "dd LLL yyyy, HH:mm"
       },
       "url": {
         "type": "text"
