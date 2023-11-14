@@ -1,1 +1,1 @@
-cp ../../data/backup-tracks-with-entities.json tracks.json
+python ../../characterization/lookup_json.py ../../data/backup-tracks-with-entities.json \* | python create_data.py > data/tracks.json

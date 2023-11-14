@@ -1,2 +1,7 @@
-# Populate collection using mapped path inside container.
-docker exec -it versevault-solr bin/post -c courses /data/tracks.json
+#!/bin/bash
+
+curl -X POST -H 'Content-Type: application/json' 'http://localhost:8983/solr/tracks_initial/update' \
+    --data-binary '@./data/tracks.json'
+
+curl -X POST -H 'Content-Type: application/json' 'http://localhost:8983/solr/tracks_refined/update' \
+    --data-binary '@./data/tracks.json'
