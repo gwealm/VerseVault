@@ -1,0 +1,6 @@
+# Scenario: I want to find a song containing a specific textual excerpt.
+# Query Example: Search for songs that include the phrase "unbreakable spirit".
+
+unbreakable spirit
+
+

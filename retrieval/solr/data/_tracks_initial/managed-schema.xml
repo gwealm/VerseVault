@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<schema name="music_schema" version="1.6">
+  <types>
+    <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
+    <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0" />
+    <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0" />
+    <fieldType name="date" class="solr.TrieDateField" precisionStep="0" positionIncrementGap="0" />
+    <!-- Define a custom field type for text with custom tokenization -->
+    <fieldType name="custom_text" class="solr.TextField">
+      <analyzer>
+        <tokenizer class="solr.StandardTokenizerFactory" />
+        <!-- Add custom token filters here for your tokenization needs -->
+        <!-- For example, you can add stemming, lowercase, or other filters -->
+      </analyzer>
+    </fieldType>
+    <!-- Define a custom date field type for "publishedAt" with the specified format -->
+    <!-- <fieldType name="custom_date" class="solr.TrieDateField" precisionStep="0" positionIncrementGap="0">
+      <analyzer>
+        <tokenizer class="solr.StandardTokenizerFactory" />
+      </analyzer>
+      <str name="date.format">dd LLL yyyy, HH:mm</str>
+    </fieldType> -->
+  </types>
+  
+  <fields>
+    <field name="@timestamp" type="date" multiValued="false" indexed="true" stored="true" />
+    <field name="trackId" type="string" multiValued="false" indexed="true" stored="true" />
+    <field name="__order" type="long" multiValued="false" indexed="true" stored="true" />
+    <field name="album" type="string" multiValued="false" indexed="true" stored="true" />
+    <field name="artist" type="string" multiValued="false" indexed="true" stored="true" />
+    <field name="duration" type="long" multiValued="false" indexed="true" stored="true" />
+    <field name="entities" type="string" multiValued="false" indexed="true" stored="true" />
+    <field name="genres" type="string" multiValued="true" indexed="true" stored="true" />
+    <field name="lyrics" type="nested" multiValued="true" indexed="true" stored="true">
+      <field name="title" type="string" multiValued="false" indexed="false" stored="true" />
+      <field name="content" type="custom_text" multiValued="false" indexed="true" stored="true" />
+    </field>
+    <field name="name" type="custom_text" multiValued="false" indexed="true" stored="true" />
+    <!-- Use the custom_date field type for "publishedAt" with the specified format -->
+    <!-- <field name="publishedAt" type="custom_date" multiValued="false" indexed="true" stored="true" /> -->
+    <field name="url" type="string" multiValued="false" indexed="true" stored="true" />
+    <!-- Define a copy field to copy the "content" field to a common text field for FTS -->
+    <copyField source="lyrics.content" dest="lyrics_content_fts" />
+  </fields>
+  
+  <uniqueKey>trackId</uniqueKey>
+</schema>

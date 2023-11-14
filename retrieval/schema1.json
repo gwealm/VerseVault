@@ -63,7 +63,7 @@
         {
             "name": "artist",
             "type": "text_general",
-            "indexed": true,OOPS
+            "indexed": true,
             "stored": true
         },
         {

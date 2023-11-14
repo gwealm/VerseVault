@@ -1,0 +1,1 @@
+cp ../../data/backup-tracks-with-entities.json tracks.json
