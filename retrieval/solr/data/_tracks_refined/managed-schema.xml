@@ -1075,18 +1075,30 @@
         <filter class="solr.KeywordRepeatFilterFactory" />
         <filter class="solr.PorterStemFilterFactory" />
         <filter class="solr.RemoveDuplicatesTokenFilterFactory" />
-        <filter class="solr.BeiderMorseFilterFactory" nameType="GENERIC" ruleType="APPROX" concat="false" languageSet="english" />
       </analyzer> 
     </fieldType>
 
+    <fieldType name="lyrics_content_phonetic_en_t" class="solr.TextField">
+      <analyzer>
+        <tokenizer name="standard" />
+        <filter class="solr.BeiderMorseFilterFactory" nameType="GENERIC" ruleType="APPROX" concat="false" languageSet="english" />
+      </analyzer>
+    </fieldType>
+
     <fieldType name="lyrics_content_es_t" class="solr.TextField">
-      <analyzer type="query">
+      <analyzer>
         <tokenizer name="standard" />
         <filter class="solr.LowerCaseFilterFactory" />
         <filter class="solr.ASCIIFoldingFilterFactory" preserveOriginal="true" />
         <filter class="solr.KeywordRepeatFilterFactory" />
         <filter class="solr.SpanishLightStemFilterFactory" />
         <filter class="solr.RemoveDuplicatesTokenFilterFactory" />
+      </analyzer>
+    </fieldType>
+
+    <fieldType name="lyrics_content_phonetic_es_t" class="solr.TextField">
+      <analyzer>
+        <tokenizer name="standard" />
         <filter class="solr.BeiderMorseFilterFactory" nameType="GENERIC" ruleType="EXACT" concat="false" languageSet="spanish" />
       </analyzer>
     </fieldType>
@@ -1100,9 +1112,13 @@
 
     <!-- Lyrics data -->
     <field name="title" type="text_general" indexed="true" stored="true" multiValued="false" />
-    <field name="content" type="string" indexed="false" stored="true" multiValued="false" />
-    <field name="content_en" type="lyrics_content_en_t" indexed="true" stored="true" multiValued="false" />
-    <field name="content_es" type="lyrics_content_es_t" indexed="true" stored="true" multiValued="false" />
+    <field name="content" type="text_general" indexed="true" stored="true" multiValued="false" />
+
+    <field name="content_en" type="lyrics_content_en_t" indexed="true" stored="false" multiValued="false" />
+    <field name="content_phonetic_en" type="lyrics_content_phonetic_en_t" indexed="true" stored="false" multiValued="false" />
+    
+    <field name="content_es" type="lyrics_content_es_t" indexed="true" stored="false" multiValued="false" />
+    <field name="content_phonetic_es" type="lyrics_content_phonetic_es_t" indexed="true" stored="false" multiValued="false" />
     
     <!-- Track data -->
     <field name="_id" type="string" multiValued="false" indexed="false" stored="false" />
@@ -1126,5 +1142,8 @@
     <!-- Era fixe se conseguissemos adicionar o conteúdo das lyric sections às tracks para permitir procura de lyrics 
     nas fronteiras das secções -->
     <copyField source="content" dest="content_en" />
+    <copyField source="content" dest="content_phonetic_en" />
+
     <copyField source="content" dest="content_es" />
+    <copyField source="content" dest="content_phonetic_es" />
 </schema>
