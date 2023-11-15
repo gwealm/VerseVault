@@ -1,1 +1,0 @@
-python3 ../characterization/lookup_json.py ../data/backup-tracks-with-entities.json \* | sed -E "s/\"_id\"/\"trackId\"/g" > data.json

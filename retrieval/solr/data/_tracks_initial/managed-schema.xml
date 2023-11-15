@@ -1033,8 +1033,13 @@
 
 
     <field name="_nest_parent_" type="string" indexed="true" stored="true"/>
+    <field name="doc_type" type="string" multiValued="false" indexed="true" stored="true" />
 
-    <field name="__order" type="long" multiValued="false" indexed="true" stored="true" />
+    <field name="title" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="content" type="text_general" indexed="true" stored="true" multiValued="false" />
+    
+
+    <field name="_id" type="string" multiValued="false" indexed="true" stored="true" />
     <field name="album" type="string" multiValued="false" indexed="true" stored="true" />
     <field name="artist" type="string" multiValued="false" indexed="true" stored="true" />
     <field name="duration" type="plong" multiValued="false" indexed="true" stored="true" />
@@ -1043,12 +1048,9 @@
     <field name="name" type="string" multiValued="false" indexed="true" stored="true" />
     
     <!-- Use the custom_date field type for "publishedAt" with the specified format -->
-    <field name="publishedAt" type="custom_date" multiValued="false" indexed="true" stored="true" />
-    <!-- <field name="url" type="string" multiValued="false" indexed="true" stored="true" /> -->
+    <field name="publishedAt" type="pdate" multiValued="false" indexed="true" stored="true" />
+    <field name="url" type="string" multiValued="false" indexed="true" stored="true" />
     <!-- Define a copy field to copy the "content" field to a common text field for FTS -->
-    <copyField source="lyrics.content" dest="lyrics_content_fts" />
+    <!-- <copyField source="lyrics.content" dest="lyrics_content_fts" /> -->
     
-    <!-- <field name="type" type="string" multiValued="false" indexed="true" stored="true" /> -->
-    <!-- <field name="title" type="string" multiValued="false" indexed="true" stored="true" /> -->
-    <!-- <field name="content" type="string" multiValued="false" indexed="true" stored="true" /> -->
 </schema>

@@ -1,24 +1,18 @@
 import json
 import sys
 import datetime
+from dateutil.parser import parse
+
+def convert_to_utc(date: str) -> str:
+    dt = parse(date, fuzzy=True)
+
+    dt = dt.astimezone(datetime.timezone.utc).isoformat()
+    dt = dt[:-6]
+    
+    return dt + "Z"
 
 def main():
-    month_dict = { "Jan" : "01", "Feb" : "02", "Mar" : "03", "Apr" : "04", "May" : "05", "Jun" : "06", 
-                  "Jul" : "07", "Aug" : "08", "Sep" : "09", "Oct" : "10", "Nov" : "11", "Dec" : "12" }
-    
-    def convert_to_utc(date: str) -> str:
-        day_month_year, hour_min = date.split(",")[0], date.split(",")[1]
-        day, month, year = int(day_month_year.split(" ")[0]), int(month_dict[day_month_year.split(" ")[1]]), int(day_month_year.split(" ")[2])
-        hour, min = int(hour_min.split(":")[0]), int(hour_min.split(":")[1])
-
-        # x = datetime.datetime(year=year, month=month, day=day, hour=hour, minute=min, tzinfo=datetime.timezone.utc)
-        x = "{year}-{month}-{day}T{hour}:{min}:{sec}Z".format(year=year, month=month, day=day, hour=hour, min=min, sec="00")
-        
-        return x
-
-    # convert_to_utc("14 Nov 2023, 20:12")
-    
-    id = 0
+    curr_id = 0
     
     objects = []
     while True:
@@ -27,26 +21,27 @@ def main():
             break
         
         obj = json.loads(line)
-        obj["type"] = "track"
+        obj["doc_type"] = "track"
         
-        obj["id"] = str(id)
-        id += 1
+        obj["id"] = str(curr_id)
+        curr_id += 1
 
-        obj["publishedAt"] = convert_to_utc(obj.get("publishedAt"))
+        if "publishedAt" in obj:
+            obj["publishedAt"] = convert_to_utc(obj["publishedAt"])
         
         for child in obj["lyrics"]:
-            child["type"] = "lyric_section"
+            child["doc_type"] = "lyric_section"
             
             if "title" in child:
-                child["title_s"] = child["title"]
-                del child["title"]
+                child["title"] = child["title"]
+                # del child["title"]
                 
             if "content" in child:
-                child["content_t"] = child["content"]
-                del child["content"]
+                child["content"] = child["content"]
+                # del child["content"]
             
-            child["id"] = str(id)
-            id += 1
+            child["id"] = str(curr_id)
+            curr_id += 1
             
             
         obj["entities.text"] = list(map(lambda x: x["text"], obj["entities"]))
@@ -69,6 +64,7 @@ def main():
         
         # obj["_childDocuments_"] = obj["lyrics"].copy()
         # del obj["lyrics"]
+        del obj["__order"]
         
         objects.append(obj)
         
@@ -91,3 +87,4 @@ def main():
         
 if __name__ == '__main__':
     main()
+    # pass

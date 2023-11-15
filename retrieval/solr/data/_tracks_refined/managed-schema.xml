@@ -1031,4 +1031,65 @@
      </similarity>
     -->
 
+    <!-- <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100" multiValued="true">
+      <analyzer type="index">
+        <tokenizer name="standard"/>
+        <filter name="stop" ignoreCase="true" words="stopwords.txt" /> -->
+        <!-- in this example, we will only use synonyms at query time
+        <filter name="synonymGraph" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
+        <filter name="flattenGraph"/>
+        -->
+        <!-- <filter name="lowercase"/>
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer name="standard"/>
+        <filter name="stop" ignoreCase="true" words="stopwords.txt" />
+        <filter name="synonymGraph" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+        <filter name="lowercase"/>
+      </analyzer>
+    </fieldType> -->
+
+    <fieldType name="artist_t" class="solr.TextField">
+      <analyzer>
+        <tokenizer name="whitespace" />
+        <filter name="lowercase" />
+        <filter name="asciiFolding" preserveOriginal="true" />
+        <filter name="patternReplace" pattern="\b\W+?" replacement="" />
+      </analyzer>
+    </fieldType>
+
+    <field name="_nest_parent_" type="string" indexed="true" stored="true"/>
+    <field name="doc_type" type="string" multiValued="false" indexed="true" stored="false" />
+
+    <!-- Lyrics data -->
+    <!-- Lowercase e whitespace no title -->
+    <field name="title" type="text_general" indexed="true" stored="true" multiValued="false" />
+    <field name="content" type="text_general" indexed="true" stored="true" multiValued="false" />
+    
+    <!-- Track data -->
+    <field name="_id" type="string" multiValued="false" indexed="false" stored="false" />
+    <field name="name" type="text_general" multiValued="false" indexed="true" stored="true" />
+    <field name="duration" type="plong" multiValued="false" indexed="true" stored="true" />
+    <field name="url" type="string" multiValued="false" indexed="false" stored="true" />
+    <field name="artist" type="artist_t" multiValued="false" indexed="true" stored="true" />
+    <field name="publishedAt" type="pdate" multiValued="false" indexed="true" stored="true" />
+    <field name="genres" type="string" multiValued="true" indexed="true" stored="true" />
+    
+    <!-- Album data -->
+    <field name="album.name" type="text_general" multiValued="false" indexed="true" stored="true" />
+    <field name="album.image" type="string" multiValued="false" indexed="false" stored="true" />
+    
+    <!-- Entity data-->
+    <!-- É preciso analyzer custom para o texto das entities, meter lowercase mainly -->
+    <field name="entities.text" type="text_general" multiValued="true" indexed="true" stored="true" />
+    <field name="entities.start" type="plong" multiValued="true" indexed="false" stored="true" />
+    <field name="entities.end" type="plong" multiValued="true" indexed="false" stored="true" />
+    <field name="entities.type" type="string" multiValued="true" indexed="false" stored="false" />
+
+    <!-- Era fixe se conseguissemos adicionar o conteúdo das lyric sections às tracks para permitir procura de lyrics 
+    nas fronteiras das secções -->
+    <!-- <copyField source="lyrics.content" dest="lyrics_content_fts" /> -->
+    
+    <!-- Confirmar lowercase na maior parte dos text fields (text_general já tem lowercase) -->
+    <!-- Confirmar se há algum string field que esteja a ser indexado e que precise de lowercase -->
 </schema>
