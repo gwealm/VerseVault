@@ -1059,7 +1059,7 @@
       </analyzer>
     </fieldType>
 
-    <fieldType name="entity_t" class="solr.TextField">
+    <fieldType name="basic_text_t" class="solr.TextField">
       <analyzer>
         <tokenizer name="standard" />
         <filter name="lowercase" />
@@ -1111,14 +1111,14 @@
     <field name="url" type="string" multiValued="false" indexed="false" stored="true" />
     <field name="artist" type="artist_t" multiValued="false" indexed="true" stored="true" />
     <field name="publishedAt" type="pdate" multiValued="false" indexed="true" stored="true" />
-    <field name="genres" type="string" multiValued="true" indexed="true" stored="true" />
+    <field name="genres" type="basic_text_t" multiValued="true" indexed="true" stored="true" />
     
     <!-- Album data -->
     <field name="album.name" type="text_general" multiValued="false" indexed="true" stored="true" />
     <field name="album.image" type="string" multiValued="false" indexed="false" stored="true" />
     
     <!-- Entity data-->
-    <field name="entities.text" type="entity_t" multiValued="true" indexed="true" stored="true" />
+    <field name="entities.text" type="basic_text_t" multiValued="true" indexed="true" stored="true" />
     <field name="entities.start" type="plong" multiValued="true" indexed="false" stored="true" />
     <field name="entities.end" type="plong" multiValued="true" indexed="false" stored="true" />
     <field name="entities.type" type="string" multiValued="true" indexed="false" stored="false" />
