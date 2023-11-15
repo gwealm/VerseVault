@@ -1051,20 +1051,58 @@
 
     <fieldType name="artist_t" class="solr.TextField">
       <analyzer>
-        <tokenizer name="whitespace" />
+        <tokenizer name="letter" />
+        <!-- <tokenizer name="whitespace" /> -->
         <filter name="lowercase" />
         <filter name="asciiFolding" preserveOriginal="true" />
         <filter name="patternReplace" pattern="\b\W+?" replacement="" />
       </analyzer>
     </fieldType>
 
+    <fieldType name="entity_t" class="solr.TextField">
+      <analyzer>
+        <tokenizer name="standard" />
+        <filter name="lowercase" />
+        <filter name="asciiFolding" preserveOriginal="true" />
+      </analyzer>
+    </fieldType>
+
+    <fieldType name="lyrics_content_en_t" class="solr.TextField">
+      <analyzer>
+        <tokenizer name="standard" />
+        <filter class="solr.LowerCaseFilterFactory" />
+        <filter class="solr.ASCIIFoldingFilterFactory" preserveOriginal="true" />
+        <filter class="solr.KeywordRepeatFilterFactory" />
+        <filter class="solr.PorterStemFilterFactory" />
+        <filter class="solr.RemoveDuplicatesTokenFilterFactory" />
+        <filter class="solr.BeiderMorseFilterFactory" nameType="GENERIC" ruleType="APPROX" concat="false" languageSet="english" />
+      </analyzer> 
+    </fieldType>
+
+    <fieldType name="lyrics_content_es_t" class="solr.TextField">
+      <analyzer type="query">
+        <tokenizer name="standard" />
+        <filter class="solr.LowerCaseFilterFactory" />
+        <filter class="solr.ASCIIFoldingFilterFactory" preserveOriginal="true" />
+        <filter class="solr.KeywordRepeatFilterFactory" />
+        <filter class="solr.SpanishLightStemFilterFactory" />
+        <filter class="solr.RemoveDuplicatesTokenFilterFactory" />
+        <filter class="solr.BeiderMorseFilterFactory" nameType="GENERIC" ruleType="EXACT" concat="false" languageSet="spanish" />
+      </analyzer>
+    </fieldType>
+
+    <fieldType name="doc_type" class="solr.EnumFieldType" docValues="true" enumsConfig="enumsconfig.xml" enumName="doc_type_enum">
+
+    </fieldType>
+
     <field name="_nest_parent_" type="string" indexed="true" stored="true"/>
     <field name="doc_type" type="string" multiValued="false" indexed="true" stored="false" />
 
     <!-- Lyrics data -->
-    <!-- Lowercase e whitespace no title -->
     <field name="title" type="text_general" indexed="true" stored="true" multiValued="false" />
-    <field name="content" type="text_general" indexed="true" stored="true" multiValued="false" />
+    <field name="content" type="string" indexed="false" stored="true" multiValued="false" />
+    <field name="content_en" type="lyrics_content_en_t" indexed="true" stored="true" multiValued="false" />
+    <field name="content_es" type="lyrics_content_es_t" indexed="true" stored="true" multiValued="false" />
     
     <!-- Track data -->
     <field name="_id" type="string" multiValued="false" indexed="false" stored="false" />
@@ -1080,16 +1118,13 @@
     <field name="album.image" type="string" multiValued="false" indexed="false" stored="true" />
     
     <!-- Entity data-->
-    <!-- É preciso analyzer custom para o texto das entities, meter lowercase mainly -->
-    <field name="entities.text" type="text_general" multiValued="true" indexed="true" stored="true" />
+    <field name="entities.text" type="entity_t" multiValued="true" indexed="true" stored="true" />
     <field name="entities.start" type="plong" multiValued="true" indexed="false" stored="true" />
     <field name="entities.end" type="plong" multiValued="true" indexed="false" stored="true" />
     <field name="entities.type" type="string" multiValued="true" indexed="false" stored="false" />
 
     <!-- Era fixe se conseguissemos adicionar o conteúdo das lyric sections às tracks para permitir procura de lyrics 
     nas fronteiras das secções -->
-    <!-- <copyField source="lyrics.content" dest="lyrics_content_fts" /> -->
-    
-    <!-- Confirmar lowercase na maior parte dos text fields (text_general já tem lowercase) -->
-    <!-- Confirmar se há algum string field que esteja a ser indexado e que precise de lowercase -->
+    <copyField source="content" dest="content_en" />
+    <copyField source="content" dest="content_es" />
 </schema>
