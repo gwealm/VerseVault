@@ -1,0 +1,15 @@
+.js-tilt-glare {
+  border-radius: 10px !important;
+}
+
+.js-tilt-glare:hover .js-tilt-glare-inner {
+  transition: 0.2s !important;
+}
+
+.js-tilt-glare-inner {
+  background-image: linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgb(178, 248, 252) 100%
+  ) !important;
+}
