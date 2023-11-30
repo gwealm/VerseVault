@@ -2,6 +2,14 @@ import json
 import sys
 import datetime
 from dateutil.parser import parse
+from sentence_transformers import SentenceTransformer
+
+# Load the SentenceTransformer model
+model = SentenceTransformer('all-MiniLM-L6-v2')
+
+def get_embedding(text):
+    # The model.encode() method already returns a list of floats
+    return model.encode(text, convert_to_tensor=False).tolist()
 
 def convert_to_utc(date: str) -> str:
     dt = parse(date, fuzzy=True)
@@ -13,7 +21,7 @@ def convert_to_utc(date: str) -> str:
 
 def main():
     curr_id = 0
-    
+
     objects = []
     while True:
         line = sys.stdin.readline()
@@ -25,6 +33,8 @@ def main():
         
         obj["id"] = str(curr_id)
         curr_id += 1
+
+        combined_text = ""
 
         if "publishedAt" in obj:
             obj["publishedAt"] = convert_to_utc(obj["publishedAt"])
@@ -38,11 +48,11 @@ def main():
                 
             if "content" in child:
                 child["content"] = child["content"]
+                combined_text += child["content"]
                 # del child["content"]
             
             child["id"] = str(curr_id)
             curr_id += 1
-            
             
         obj["entities.text"] = list(map(lambda x: x["text"], obj["entities"]))
         obj["entities.start"] = list(map(lambda x: x["start"], obj["entities"]))
@@ -65,6 +75,9 @@ def main():
         # obj["_childDocuments_"] = obj["lyrics"].copy()
         # del obj["lyrics"]
         del obj["__order"]
+
+        # semantic search
+        obj["content_vector"] = get_embedding(combined_text)
         
         objects.append(obj)
         

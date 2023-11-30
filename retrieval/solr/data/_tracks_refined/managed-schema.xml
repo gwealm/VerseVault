@@ -1103,9 +1103,9 @@
       </analyzer>
     </fieldType>
 
-    <fieldType name="doc_type" class="solr.EnumFieldType" docValues="true" enumsConfig="enumsconfig.xml" enumName="doc_type_enum">
+    <fieldType name="doc_type" class="solr.EnumFieldType" docValues="true" enumsConfig="enumsconfig.xml" enumName="doc_type_enum" />
 
-    </fieldType>
+    <fieldType name="content_vector_t" class="solr.DenseVectorField" vectorDimension="384" similarityFunction="cosine" knnAlgorithm="hnsw" />
 
     <field name="_nest_parent_" type="string" indexed="true" stored="true"/>
     <field name="doc_type" type="string" multiValued="false" indexed="true" stored="false" />
@@ -1117,8 +1117,8 @@
     <field name="content_en" type="lyrics_content_en_t" indexed="true" stored="false" multiValued="false" />
     <field name="content_phonetic_en" type="lyrics_content_phonetic_en_t" indexed="true" stored="false" multiValued="false" />
     
-    <field name="content_es" type="lyrics_content_es_t" indexed="true" stored="false" multiValued="false" />
-    <field name="content_phonetic_es" type="lyrics_content_phonetic_es_t" indexed="true" stored="false" multiValued="false" />
+    <!-- <field name="content_es" type="lyrics_content_es_t" indexed="true" stored="false" multiValued="false" />
+    <field name="content_phonetic_es" type="lyrics_content_phonetic_es_t" indexed="true" stored="false" multiValued="false" /> -->
     
     <!-- Track data -->
     <field name="_id" type="string" multiValued="false" indexed="false" stored="false" />
@@ -1139,11 +1139,14 @@
     <field name="entities.end" type="plong" multiValued="true" indexed="false" stored="true" />
     <field name="entities.type" type="string" multiValued="true" indexed="false" stored="false" />
 
+    <field name="content_vector" type="content_vector_t" indexed="true" stored="true" />
+
     <!-- Era fixe se conseguissemos adicionar o conteúdo das lyric sections às tracks para permitir procura de lyrics 
     nas fronteiras das secções -->
-    <copyField source="content" dest="content_en" />
+    
+    <!-- <copyField source="content" dest="content_en" />
     <copyField source="content" dest="content_phonetic_en" />
 
     <copyField source="content" dest="content_es" />
-    <copyField source="content" dest="content_phonetic_es" />
+    <copyField source="content" dest="content_phonetic_es" /> -->
 </schema>
