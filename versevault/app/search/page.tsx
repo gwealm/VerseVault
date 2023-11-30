@@ -10,7 +10,14 @@ async function sleep(ms: number) {
 }
 
 async function findTracksByQuery(query: string) {
-    await sleep(5000);
+    "use server"
+
+    await sleep(1000);
+
+    const res = await fetch('http://127.0.0.1:5000', {method: 'get'});
+    console.log(res)
+    return await res.json()
+
     return [
         {
             id: "1",
@@ -40,7 +47,6 @@ export default function Page({ searchParams }: PageProps) {
     if (!q || typeof q !== "string")
         return (
             <>
-                <MainNav />
                 <main className="flex min-h-screen flex-col items-center justify-between p-24">
                     <h1>My Page</h1>
                 </main>
@@ -51,22 +57,12 @@ export default function Page({ searchParams }: PageProps) {
     const searchResults = findTracksByQuery(q).then((tracks) => {
         return (
             <ul>
-                {tracks.map((track) => {
-                    return (
-                        <li key={track.id}>
-                            <h2>{track.title}</h2>
-                            <p>
-                                {track.artist} - {track.album}
-                            </p>
-                        </li>
-                    );
-                })}
+                {tracks}
             </ul>
         );
     });
     return (
         <>
-            <MainNav />
             <main className="flex min-h-screen flex-col items-center justify-between p-24">
                 <h1>My Page</h1>
                 <Suspense fallback={<p>Loading...</p>}>
