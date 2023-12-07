@@ -1,3 +1,6 @@
+import Image from "next/image";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 type PageProps = {
@@ -5,7 +8,7 @@ type PageProps = {
 };
 
 type SolrResponseProps = {
-    docs: [],
+    docs: DocumentProps[],
     maxScore: number,
     numFound: number,
     numFoundExact: boolean,
@@ -15,6 +18,7 @@ type SolrResponseProps = {
 type DocumentProps = {
     artist: string,
     id: string,
+    "album.image": string,
     lyrics: [],
     name: string,
     score: number,
@@ -23,7 +27,7 @@ type DocumentProps = {
 async function findTracksByQuery(query: string) {
     "use server"
 
-    const res = await fetch(`http://127.0.0.1:5000?q=${query}`, {method: 'get'});
+    const res = await fetch(`http://127.0.0.1:5000/tracks_refined?q=${query}`, {method: 'get', cache: 'no-cache'});
     const r = await res.json()
 
     return r
@@ -33,26 +37,27 @@ export default function Page({ searchParams }: PageProps) {
     const { q } = searchParams;
     console.log(q)
 
-    // TODO: Implement this
     if (!q || typeof q !== "string")
-        return (
-            <>
-                <main className="flex min-h-screen flex-col items-center justify-between p-24">
-                    <h1>My Page</h1>
-                </main>
-            </>
-        );
-    // return to this page ut returns an error in red
+        redirect("/");
+
+        // return to this page ut returns an error in red
     const searchResults = findTracksByQuery(q).then((res) => {
         const response: SolrResponseProps = res.response
 
         return (
-            <ul>
+            <ul className="flex flex-col gap-4 w-full p-4">
                 {
                     response.docs.map((el: DocumentProps, index: number) => (
-                        <li className="flex flex-row gap-2 justify-between" key={index}>
-                            <span>{el.artist}</span>
-                            <span>{el.score}</span>
+                        <li key={index}>
+                            <Link href="/tracks/gjkfhktgh" className="block bg-neutral-800 flex gap-2 h-32">
+                                <div className="grow-0">
+                                    <Image src={el["album.image"] ?? "https://avatars.githubusercontent.com/t/8605584?s=116&v=4"} width={128} height={128} alt="" className="h-full aspect-square object-cover" />
+                                </div>
+                                <div className="grow p-2">
+                                    <p className="font-bold text-lg">{el.name}</p>
+                                    <p className="text-neutral-400">{el.artist}</p>
+                             </div>
+                             </Link>
                         </li>
                     ))
                 }
@@ -63,11 +68,9 @@ export default function Page({ searchParams }: PageProps) {
     return (
         <>
             <main className="flex min-h-screen flex-col items-center mt-1 gap-2">
-                <h1 className="text-xl flex">{`Results for: ${q}`}</h1>
+                <h1 className="text-xl flex w-full">{`Results for: ${q}`}</h1>
                 <Suspense fallback={<p>Loading...</p>}>
-                    <div className="flex">
-                        {searchResults}
-                    </div>
+                    {searchResults}
                 </Suspense>
             </main>
         </>

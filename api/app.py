@@ -10,10 +10,9 @@ run flask run in the /api directory to start the api server
 
 app = Flask(__name__)
 
-@app.route("/")
-def query():
+@app.route("/<collection>")
+def query(collection: str):
     solr_endpoint = "http://localhost:8983/solr"
-    collection = "tracks_refined"
 
     query_string = request.args.get('q')
 
@@ -41,7 +40,7 @@ def solr_knn_query(endpoint, collection, embedding):
 
     data = {
         "q": f"{{!knn f=content_vector topK=10}}{embedding}",
-        "fl": "id,lyrics,content,name,artist,[child],score",
+        "fl": "id,lyrics,content,name,artist,[child],score,album.image",
         "rows": 10,
         "wt": "json"
     }
