@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 type PageProps = {
-    searchParams: { [key: string]: string | string[] | undefined };
+    searchParams: { [key: string]: string | string[] | string };
 };
 
 type SolrResponseProps = {
@@ -27,20 +27,20 @@ type DocumentProps = {
 async function findTracksByQuery(query: string, core: string) {
     "use server"
 
+    console.log(`http://127.0.0.1:5000/${core}?q=${query}`)
     const res = await fetch(`http://127.0.0.1:5000/${core}?q=${query}`, {method: 'get', cache: 'no-cache'});
     const r = await res.json()
-
     return r
 }
 
 export default function Page({ searchParams }: PageProps) {
     const { q } = searchParams;
     const { core } = searchParams;
-    console.log(core)
 
-    if (!q || typeof q !== "string")
+    if (!q || typeof q !== "string" || !core)
         redirect("/");
 
+    
     // return to this page ut returns an error in red
     const searchResults = findTracksByQuery(q, core).then((res) => {
         const response: SolrResponseProps = res.response

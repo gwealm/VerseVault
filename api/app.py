@@ -20,11 +20,11 @@ def query(collection: str):
     query = request.args.get('q')
 
     try:
-        if collection == "semantic":
+        if collection == "tracks_semantic":
             query = text_to_embedding(query)
             results = solr_knn_query(solr_endpoint, collection, query)
         else:
-            results = query(solr_endpoint, collection, query)
+            results = solr_query(solr_endpoint, collection, query)
         
         print(results)
         return results
@@ -32,13 +32,13 @@ def query(collection: str):
         print(f"Error {e.response.status_code}: {e.response.text}")
         return {"error": "failed to get results"}
 
-def query(endpoint, collection, query):
+def solr_query(endpoint, collection, query):
     url = f"{endpoint}/{collection}/select"
 
     data = {
-        "q": f"{query}",
-        "fl": "id,lyrics,content,name,artist,[child],score,album.image",
-        "rows": 10,
+        "q": f"{{!parent which=doc_type:track filters=$childfq score=max}}{{!edismax qf=content}}({query})",
+        # "fl": "id,lyrics,content,name,artist,[child],score,album.image",
+        "rows": 20,
         "wt": "json"
     }
     
@@ -64,7 +64,7 @@ def solr_knn_query(endpoint, collection, embedding):
     data = {
         "q": f"{{!knn f=content_vector topK=10}}{embedding}",
         "fl": "id,lyrics,content,name,artist,[child],score,album.image",
-        "rows": 10,
+        "rows": 20,
         "wt": "json"
     }
     
