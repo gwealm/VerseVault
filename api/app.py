@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import request
+from flask_cors import CORS
 
 import requests
 from sentence_transformers import SentenceTransformer
@@ -9,23 +10,45 @@ run flask run in the /api directory to start the api server
 """
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/<collection>")
 def query(collection: str):
+    print(f"{collection}")
     solr_endpoint = "http://localhost:8983/solr"
 
-    query_string = request.args.get('q')
-
-    embedding = text_to_embedding(query_string)
+    query = request.args.get('q')
 
     try:
-        results = solr_knn_query(solr_endpoint, collection, embedding)
+        if collection == "semantic":
+            query = text_to_embedding(query)
+            results = solr_knn_query(solr_endpoint, collection, query)
+        else:
+            results = query(solr_endpoint, collection, query)
+        
         print(results)
         return results
     except requests.HTTPError as e:
         print(f"Error {e.response.status_code}: {e.response.text}")
         return {"error": "failed to get results"}
 
+def query(endpoint, collection, query):
+    url = f"{endpoint}/{collection}/select"
+
+    data = {
+        "q": f"{query}",
+        "fl": "id,lyrics,content,name,artist,[child],score,album.image",
+        "rows": 10,
+        "wt": "json"
+    }
+    
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    
+    response = requests.post(url, data=data, headers=headers)
+    response.raise_for_status()
+    return response.json()
 
 def text_to_embedding(text):
     model = SentenceTransformer('all-MiniLM-L6-v2')
@@ -50,5 +73,13 @@ def solr_knn_query(endpoint, collection, embedding):
     }
     
     response = requests.post(url, data=data, headers=headers)
+    response.raise_for_status()
+    return response.json()
+
+@app.route("/cores")
+def get_cores():
+    url = "http://localhost:8983/api/cores"
+
+    response = requests.get(url)
     response.raise_for_status()
     return response.json()

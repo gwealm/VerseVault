@@ -24,10 +24,10 @@ type DocumentProps = {
     score: number,
 }
 
-async function findTracksByQuery(query: string) {
+async function findTracksByQuery(query: string, core: string) {
     "use server"
 
-    const res = await fetch(`http://127.0.0.1:5000/tracks_refined?q=${query}`, {method: 'get', cache: 'no-cache'});
+    const res = await fetch(`http://127.0.0.1:5000/${core}?q=${query}`, {method: 'get', cache: 'no-cache'});
     const r = await res.json()
 
     return r
@@ -35,13 +35,14 @@ async function findTracksByQuery(query: string) {
 
 export default function Page({ searchParams }: PageProps) {
     const { q } = searchParams;
-    console.log(q)
+    const { core } = searchParams;
+    console.log(core)
 
     if (!q || typeof q !== "string")
         redirect("/");
 
-        // return to this page ut returns an error in red
-    const searchResults = findTracksByQuery(q).then((res) => {
+    // return to this page ut returns an error in red
+    const searchResults = findTracksByQuery(q, core).then((res) => {
         const response: SolrResponseProps = res.response
 
         return (

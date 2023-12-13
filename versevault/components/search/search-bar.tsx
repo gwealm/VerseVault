@@ -3,7 +3,11 @@
 import Link from "next/link";
 import React, { useState } from "react";
 
-export const SearchBar = () => {
+type SearchBarProps = {
+    core: string
+}
+
+export const SearchBar = ({ core }: SearchBarProps) => {
 
     const [query, setQuery] = useState("")
 
@@ -58,7 +62,7 @@ export const SearchBar = () => {
                         </div>
                     </div>
                     <div className="mt-3 flex space-x-12">
-                        <Link href={`/search/?q=${query}`} type="submit" className="px-2 py-1">Lyric Search</Link>
+                        <Link href={`/search/?core=${core}&q=${query}`} type="submit" className="px-2 py-1">Lyric Search</Link>
                         <div className="px-2 py-1">
                             I'm Feeling Lucky
                         </div>

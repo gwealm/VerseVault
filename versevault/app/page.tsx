@@ -1,7 +1,6 @@
-import { SearchBar } from "@/components/search/search-bar";
+import { SearchBox } from "@/components/search-box/search-box";
 
 async function search(formData: FormData) {
-  "use server";
 
   const q = formData.get("q");
   if (!q || typeof q !== "string") {
@@ -9,13 +8,24 @@ async function search(formData: FormData) {
   }
 }
 
+async function findCores() {
 
-export default function Home() {
+  const res = await fetch(`http://127.0.0.1:5000/cores`)
+  const cores = await res.json()
+
+  const names = Object.keys(cores.status)
+
+  return names
+}
+
+export default async function Home() {
+
+  const cores = await findCores()
 
   return (
     <>
       <main className="flex flex-col p-24">
-        <SearchBar />
+        <SearchBox cores={cores}  />
       </main>
     </>
   );

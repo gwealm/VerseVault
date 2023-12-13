@@ -1,7 +1,0 @@
-<?xml version="1.0" ?>
-<enumsConfig>
-  <enum name="doc_type_enum">
-    <value>track</value>
-    <value>lyric_section</value>
-  </enum>
-</enumsConfig>
