@@ -1040,7 +1040,8 @@
     
 
     <field name="_id" type="string" multiValued="false" indexed="true" stored="true" />
-    <field name="album" type="string" multiValued="false" indexed="true" stored="true" />
+    <field name="album.name" type="string" multiValued="false" indexed="true" stored="true" />
+    <field name="album.image" type="string" multiValued="false" indexed="true" stored="true" />
     <field name="artist" type="string" multiValued="false" indexed="true" stored="true" />
     <field name="duration" type="plong" multiValued="false" indexed="true" stored="true" />
     <field name="entities.text" type="string" multiValued="true" indexed="true" stored="true" />

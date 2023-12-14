@@ -22,14 +22,18 @@ type DocumentProps = {
     lyrics: [],
     name: string,
     score: number,
+    url: string,
 }
 
-async function findTracksByQuery(query: string, core: string) {
+async function findTracksByQuery(query: string, core: string | string[]) {
     "use server"
 
-    console.log(`http://127.0.0.1:5000/${core}?q=${query}`)
-    const res = await fetch(`http://127.0.0.1:5000/${core}?q=${query}`, {method: 'get', cache: 'no-cache'});
+    const url = new URL(`http://127.0.0.1:5000/${core}`)
+    url.searchParams.set("q", query)
+
+    const res = await fetch(url, {method: 'get', cache: 'no-cache'});
     const r = await res.json()
+    
     return r
 }
 
@@ -44,25 +48,29 @@ export default function Page({ searchParams }: PageProps) {
     // return to this page ut returns an error in red
     const searchResults = findTracksByQuery(q, core).then((res) => {
         const response: SolrResponseProps = res.response
+        response.docs.map((l) => console.log(l["album.image"]))
 
         return (
-            <ul className="flex flex-col gap-4 w-full p-4">
-                {
-                    response.docs.map((el: DocumentProps, index: number) => (
-                        <li key={index}>
-                            <Link href="/tracks/gjkfhktgh" className="block bg-neutral-800 flex gap-2 h-32">
-                                <div className="grow-0">
-                                    <Image src={el["album.image"] ?? "https://avatars.githubusercontent.com/t/8605584?s=116&v=4"} width={128} height={128} alt="" className="h-full aspect-square object-cover" />
+            <>
+                <span>Found {response.numFound} results</span>
+                <ul className="flex flex-col gap-4 w-full p-4">
+                    {
+                        response.docs.map((el: DocumentProps, index: number) => (
+                            <li key={index}>
+                                <Link href={`/tracks/${el.id}?core=${core}`} className="bg-neutral-800 flex gap-2 h-32">
+                                    <div className="grow-0">
+                                        <Image src={el["album.image"] ?? "https://avatars.githubusercontent.com/t/8605584?s=116&v=4"} width={128} height={128} alt="" className="h-full aspect-square object-cover" />
+                                    </div>
+                                    <div className="grow p-2">
+                                        <p className="font-bold text-lg">{el.name}</p>
+                                        <p className="text-neutral-400">{el.artist}</p>
                                 </div>
-                                <div className="grow p-2">
-                                    <p className="font-bold text-lg">{el.name}</p>
-                                    <p className="text-neutral-400">{el.artist}</p>
-                             </div>
-                             </Link>
-                        </li>
-                    ))
-                }
-            </ul>
+                                </Link>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </>
         );
     })
         

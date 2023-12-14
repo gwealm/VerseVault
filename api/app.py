@@ -83,3 +83,23 @@ def get_cores():
     response = requests.get(url)
     response.raise_for_status()
     return response.json()
+
+@app.route("/<collection>/tracks/<track_name>")
+def track(collection: str, track_name: str):
+    
+    url = f"http://localhost:8983/solr/{collection}/select"
+
+    data = {
+        "q": f"id:{track_name}",
+        "fl": "*, [child]",
+        "rows": 20,
+        "wt": "json"
+    }
+    
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    
+    response = requests.post(url, data=data, headers=headers)
+    response.raise_for_status()
+    return response.json()
