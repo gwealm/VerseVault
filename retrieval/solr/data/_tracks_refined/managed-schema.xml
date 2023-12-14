@@ -1067,7 +1067,7 @@
       </analyzer>
     </fieldType>
 
-    <!-- <fieldType name="lyrics_content_en_t" class="solr.TextField">
+    <fieldType name="lyrics_content_en_t" class="solr.TextField">
       <analyzer>
         <tokenizer name="standard" />
         <filter class="solr.LowerCaseFilterFactory" />
@@ -1076,7 +1076,7 @@
         <filter class="solr.PorterStemFilterFactory" />
         <filter class="solr.RemoveDuplicatesTokenFilterFactory" />
       </analyzer> 
-    </fieldType>  -->
+    </fieldType>
 
     
     <fieldType name="lyrics_content_phonetic_t" class="solr.TextField">
@@ -1113,10 +1113,10 @@
 
     <!-- Lyrics data -->
     <field name="title" type="text_general" indexed="true" stored="true" multiValued="false" />
-    <field name="content" type="text_general" indexed="true" stored="true" multiValued="false" />
+    <field name="content" type="text_general" indexed="true" stored="false" multiValued="false" />
+    <field name="content_en" type="lyrics_content_en_t" indexed="true" stored="false" multiValued="false" />
     <field name="content_phonetic" type="lyrics_content_phonetic_t" indexed="true" stored="false" multiValued="false" />
 
-    <!-- <field name="content_en" type="lyrics_content_en_t" indexed="true" stored="false" multiValued="false" /> -->
     <!-- <field name="content_es" type="lyrics_content_es_t" indexed="true" stored="false" multiValued="false" />
     <field name="content_phonetic_es" type="lyrics_content_phonetic_es_t" indexed="true" stored="false" multiValued="false" /> -->
     
@@ -1141,14 +1141,12 @@
 
     <field name="content_vector" type="content_vector_t" indexed="true" stored="true" />
     
-    <copyField source="content" dest="content_phonetic" />
-
     <!-- Era fixe se conseguissemos adicionar o conteúdo das lyric sections às tracks para permitir procura de lyrics 
     nas fronteiras das secções -->
     
-    <!-- <copyField source="content" dest="content_en" />
+    <copyField source="content" dest="content_en" />
     <copyField source="content" dest="content_phonetic" />
-
+      <!--
     <copyField source="content" dest="content_es" />
     <copyField source="content" dest="content_phonetic_es" /> -->
 </schema>

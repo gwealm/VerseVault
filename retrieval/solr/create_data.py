@@ -42,12 +42,12 @@ def main():
         for child in obj["lyrics"]:
             child["doc_type"] = "lyric_section"
             
-            if "title" in child:
-                child["title"] = child["title"]
+            # if "title" in child:
+            #     child["title"] = child["title"]
                 # del child["title"]
                 
             if "content" in child:
-                child["content"] = child["content"]
+                # child["content"] = child["content"]
                 combined_text += child["content"]
                 # del child["content"]
             

@@ -36,7 +36,7 @@ def solr_query(endpoint, collection, query):
     url = f"{endpoint}/{collection}/select"
 
     data = {
-        "q": f"{{!parent which=doc_type:track filters=$childfq score=total}}{{!edismax qf=\"title^5 content^3\" pf=\"content^10\"}}({query})",
+        "q": f"{{!parent which=doc_type:track filters=$childfq score=total}}{{!edismax qf=\"title^0.5 content^4 content_phonetic^2\" pf=\"content^10\"}}({query})~3",
         "fl": "id,name,artist,score,album.image,genres",
         "sort": "score desc",
         "rows": 20,
@@ -93,7 +93,7 @@ def track(collection: str, track_name: str):
 
     data = {
         "q": f"id:{track_name}",
-        "fl": "*, [child]",
+        "fl": "*,[child]",
         "rows": 20,
         "wt": "json"
     }

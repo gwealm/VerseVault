@@ -49,4 +49,4 @@ export const SearchBar = ({ core }: SearchBarProps) => {
             </div>
         </>
     );
-};
+}

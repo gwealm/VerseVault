@@ -11,6 +11,11 @@ const nextConfig = {
             protocol: 'https',
             hostname: 'lastfm.freetls.fastly.net',
             pathname: '/i/u/**',
+          },
+          {
+            protocol: 'https',
+            hostname: 'cdn-icons-png.flaticon.com',
+            pathname: '/512/26/26789.png'
           }
         ],
       },

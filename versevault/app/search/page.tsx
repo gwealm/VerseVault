@@ -49,7 +49,6 @@ export default function Page({ searchParams }: PageProps) {
     // return to this page ut returns an error in red
     const searchResults = findTracksByQuery(q, core).then((res) => {
         const response: SolrResponseProps = res.response
-        response.docs.map((l) => console.log(l["album.image"]))
 
         return (
             <>
@@ -60,7 +59,7 @@ export default function Page({ searchParams }: PageProps) {
                             <li key={index}>
                                 <Link href={`/tracks/${el.id}?core=${core}`} className="bg-neutral-800 flex gap-2 h-32">
                                     <div className="grow-0">
-                                        <Image src={el["album.image"] ?? "https://f4.bcbits.com/img/a4139357031_16.jpg"} width={128} height={128} alt="" className="h-full aspect-square object-cover" />
+                                        <Image src={el["album.image"] ?? "https://cdn-icons-png.flaticon.com/512/26/26789.png"} width={128} height={128} alt="" className="h-full aspect-square object-cover" />
                                     </div>
                                     <div className="grow p-2">
                                         <p className="font-bold text-lg">{el.name}</p>

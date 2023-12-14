@@ -2,7 +2,6 @@ import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Search } from "../search/search";
 import { ModeToggle } from "../theme/mode-toggle";
 
 export function MainNav({
@@ -22,7 +21,7 @@ export function MainNav({
                     >
                         <div className="flex items-center">
                             <div className="flex-shrink-0 mr-2">
-                                <a href="/">
+                                <Link href="/">
                                     <Avatar className="h-8 w-8">
                                         <AvatarImage
                                             src="/versevault-logo.png"
@@ -30,7 +29,7 @@ export function MainNav({
                                         />
                                         <AvatarFallback>VV</AvatarFallback>
                                     </Avatar>
-                                </a>
+                                </Link>
                             </div>
                             <Link
                                 href="/"
