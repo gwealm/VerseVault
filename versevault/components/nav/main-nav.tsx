@@ -46,16 +46,9 @@ export function MainNav({
                         >
                             About Us
                         </Link>
-                        <Link
-                            href="/usage"
-                            className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-                        >
-                            Usage
-                        </Link>
                     </nav>
                 </div>
                 <div className="ml-auto flex items-center space-x-4">
-                    <Search />
                     <ModeToggle />
                 </div>
             </div>

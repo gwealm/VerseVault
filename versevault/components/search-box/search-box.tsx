@@ -13,13 +13,6 @@ export function SearchBox({cores}: SearchBoxProps) {
     return (
         <>
             <SearchBar core={selectedCore} /> 
-            <select name="cores" id="cores" defaultValue={selectedCore} onChange={(e) => { setSelectedCore(e.target.value) }}>
-                {
-                    cores.map((core, index) => (
-                        <option key={index} value={core}>{core}</option>
-                    ))
-                }
-            </select>
         </>
     )
 }

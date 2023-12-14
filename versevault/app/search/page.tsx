@@ -60,7 +60,7 @@ export default function Page({ searchParams }: PageProps) {
                             <li key={index}>
                                 <Link href={`/tracks/${el.id}?core=${core}`} className="bg-neutral-800 flex gap-2 h-32">
                                     <div className="grow-0">
-                                        <Image src={el["album.image"] ?? "https://avatars.githubusercontent.com/t/8605584?s=116&v=4"} width={128} height={128} alt="" className="h-full aspect-square object-cover" />
+                                        <Image src={el["album.image"] ?? "https://f4.bcbits.com/img/a4139357031_16.jpg"} width={128} height={128} alt="" className="h-full aspect-square object-cover" />
                                     </div>
                                     <div className="grow p-2">
                                         <p className="font-bold text-lg">{el.name}</p>

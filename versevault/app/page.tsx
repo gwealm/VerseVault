@@ -1,4 +1,5 @@
 import { SearchBox } from "@/components/search-box/search-box";
+import { SearchBar } from "@/components/search/search-bar";
 
 async function search(formData: FormData) {
 
