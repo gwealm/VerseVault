@@ -36,8 +36,9 @@ def solr_query(endpoint, collection, query):
     url = f"{endpoint}/{collection}/select"
 
     data = {
-        "q": f"{{!parent which=doc_type:track filters=$childfq score=max}}{{!edismax qf=content}}({query})",
-        # "fl": "id,lyrics,content,name,artist,[child],score,album.image",
+        "q": f"{{!parent which=doc_type:track filters=$childfq score=total}}{{!edismax qf=\"title^5 content^3\" pf=\"content^10\"}}({query})",
+        "fl": "id,name,artist,score,album.image,genres",
+        "sort": "score desc",
         "rows": 20,
         "wt": "json"
     }
@@ -62,8 +63,9 @@ def solr_knn_query(endpoint, collection, embedding):
     url = f"{endpoint}/{collection}/select"
 
     data = {
-        "q": f"{{!knn f=content_vector topK=10}}{embedding}",
-        "fl": "id,lyrics,content,name,artist,[child],score,album.image",
+        "q": f"{{!knn f=content_vector topK=20}}{embedding}",
+        "fl": "id,name,artist,score,album.image,genres",
+        "sort":"score desc",
         "rows": 20,
         "wt": "json"
     }

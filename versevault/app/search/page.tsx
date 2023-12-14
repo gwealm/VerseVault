@@ -23,6 +23,7 @@ type DocumentProps = {
     name: string,
     score: number,
     url: string,
+    genres: string[],
 }
 
 async function findTracksByQuery(query: string, core: string | string[]) {
@@ -64,7 +65,9 @@ export default function Page({ searchParams }: PageProps) {
                                     <div className="grow p-2">
                                         <p className="font-bold text-lg">{el.name}</p>
                                         <p className="text-neutral-400">{el.artist}</p>
-                                </div>
+                                        <p className="text-neutral-400">Score: {el.score}</p>
+                                        {el.genres ? <p className="text-neutral-400">Genres: {el.genres.join(', ')} </p> : null}
+                                    </div>
                                 </Link>
                             </li>
                         ))

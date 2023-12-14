@@ -1076,16 +1076,17 @@
         <filter class="solr.PorterStemFilterFactory" />
         <filter class="solr.RemoveDuplicatesTokenFilterFactory" />
       </analyzer> 
-    </fieldType>
+    </fieldType>  -->
 
-    <fieldType name="lyrics_content_phonetic_en_t" class="solr.TextField">
+    
+    <fieldType name="lyrics_content_phonetic_t" class="solr.TextField">
       <analyzer>
         <tokenizer name="standard" />
         <filter class="solr.BeiderMorseFilterFactory" nameType="GENERIC" ruleType="APPROX" concat="false" languageSet="english" />
       </analyzer>
     </fieldType>
 
-    <fieldType name="lyrics_content_es_t" class="solr.TextField">
+    <!-- <fieldType name="lyrics_content_es_t" class="solr.TextField">
       <analyzer>
         <tokenizer name="standard" />
         <filter class="solr.LowerCaseFilterFactory" />
@@ -1094,8 +1095,8 @@
         <filter class="solr.SpanishLightStemFilterFactory" />
         <filter class="solr.RemoveDuplicatesTokenFilterFactory" />
       </analyzer>
-    </fieldType> 
-    
+    </fieldType>
+
     <fieldType name="lyrics_content_phonetic_es_t" class="solr.TextField">
       <analyzer>
         <tokenizer name="standard" />
@@ -1110,10 +1111,10 @@
     <field name="_nest_parent_" type="string" indexed="true" stored="true"/>
     <field name="doc_type" type="string" multiValued="false" indexed="true" stored="false" />
 
-     <!-- Lyrics data -->
+    <!-- Lyrics data -->
     <field name="title" type="text_general" indexed="true" stored="true" multiValued="false" />
     <field name="content" type="text_general" indexed="true" stored="true" multiValued="false" />
-    <field name="content_phonetic" type="lyrics_content_phonetic_en_t" indexed="true" stored="false" multiValued="false" />
+    <field name="content_phonetic" type="lyrics_content_phonetic_t" indexed="true" stored="false" multiValued="false" />
 
     <!-- <field name="content_en" type="lyrics_content_en_t" indexed="true" stored="false" multiValued="false" /> -->
     <!-- <field name="content_es" type="lyrics_content_es_t" indexed="true" stored="false" multiValued="false" />
